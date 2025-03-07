@@ -34,20 +34,10 @@ h1 {
     z-index: 1; /* Ensure the h1 is above the canvas */
 }
 
-em {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2rem; /* Adjust the size as needed */
-    color: white; /* Adjust the color as needed */
-    margin: 0;
-    z-index: 1; /* Ensure the em is above the canvas */
-}
 
 p {
     position: absolute;
-    top: 55%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 1.5rem; /* Adjust the size as needed */

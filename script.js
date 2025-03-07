@@ -3,9 +3,6 @@ window.human = false;
 var canvasEl = document.querySelector('.fireworks');
 var ctx = canvasEl.getContext('2d');
 var numberOfParticules = 30;
-var pointerX = 0;
-var pointerY = 0;
-var tap = ('ontouchstart' in window || navigator.msMaxTouchPoints) ? 'touchstart' : 'mousedown';
 var colors = ['#800080', '#FFFF00', '#FFFFFF']; // Purple, Yellow, White
 
 function setCanvasSize() {
@@ -111,25 +108,20 @@ var render = anime({
   }
 });
 
-document.addEventListener(tap, function(e) {
+function randomFireworks() {
+  var x = anime.random(0, window.innerWidth);
+  var y = anime.random(0, window.innerHeight);
+  animateParticules(x, y);
+  setTimeout(randomFireworks, anime.random(500, 1500)); // Adjust the interval as needed
+}
+
+document.addEventListener('mousedown', function(e) {
   window.human = true;
   render.play();
   updateCoords(e);
   animateParticules(pointerX, pointerY);
 }, false);
 
-var centerX = window.innerWidth / 2;
-var centerY = window.innerHeight / 2;
-
-function autoClick() {
-  if (window.human) return;
-  animateParticules(
-    anime.random(centerX-50, centerX+50), 
-    anime.random(centerY-50, centerY+50)
-  );
-  anime({duration: 200}).finished.then(autoClick);
-}
-
-autoClick();
+randomFireworks();
 setCanvasSize();
 window.addEventListener('resize', setCanvasSize, false);
