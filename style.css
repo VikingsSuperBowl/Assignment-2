@@ -24,7 +24,7 @@ canvas.fireworks {
 
 h1 {
     position: absolute;
-    top: 35%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 4rem; /* Adjust the size as needed */
@@ -34,14 +34,46 @@ h1 {
     z-index: 1; /* Ensure the h1 is above the canvas */
 }
 
+em {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem; /* Adjust the size as needed */
+    color: white; /* Adjust the color as needed */
+    margin: 0;
+    z-index: 1; /* Ensure the em is above the canvas */
+}
 
 p {
     position: absolute;
-    top: 45%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 1.5rem; /* Adjust the size as needed */
     color: white; /* Adjust the color as needed */
     margin: 0;
     z-index: 1; /* Ensure the p is above the canvas */
+}
+
+.additional-paragraph {
+    top: 60%; /* Adjust the position as needed */
+    margin-top: 20px; /* Add space between the paragraphs */
+}
+
+.button-container {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 10px; /* Adjust the gap between buttons as needed */
+    z-index: 1; /* Ensure the buttons are above the canvas */
+    margin-top: 20px; /* Add space between the additional paragraph and the buttons */
+}
+
+button {
+    font-size: 1rem; /* Adjust the size as needed */
+    padding: 10px 20px;
+    cursor: pointer;
 }
