@@ -1,16 +1,16 @@
 window.human = false;
 
-var canvasEl = document.querySelector('.fireworks');
-var ctx = canvasEl.getContext('2d');
-var numberOfParticules = 30;
-var colors = ['#800080', '#FFFF00', '#FFFFFF']; // Initial colors: Purple, Yellow, White
-var shapes = ['circle', 'square', 'triangle']; // Possible shapes
+const canvasEl = document.querySelector('.fireworks');
+const ctx = canvasEl.getContext('2d');
+const numberOfParticules = 30;
+let colors = ['#800080', '#FFFF00', '#FFFFFF']; // Initial colors: Purple, Yellow, White
+let shapes = ['circle', 'square', 'triangle']; // Possible shapes
 
 function setCanvasSize() {
   canvasEl.width = window.innerWidth * 2;
   canvasEl.height = window.innerHeight * 2;
-  canvasEl.style.width = window.innerWidth + 'px';
-  canvasEl.style.height = window.innerHeight + 'px';
+  canvasEl.style.width = `${window.innerWidth}px`;
+  canvasEl.style.height = `${window.innerHeight}px`;
   canvasEl.getContext('2d').scale(2, 2);
 }
 
@@ -20,23 +20,25 @@ function updateCoords(e) {
 }
 
 function setParticuleDirection(p) {
-  var angle = anime.random(0, 360) * Math.PI / 180;
-  var value = anime.random(50, 180);
-  var radius = [-1, 1][anime.random(0, 1)] * value;
+  const angle = anime.random(0, 360) * Math.PI / 180;
+  const value = anime.random(50, 180);
+  const radius = [-1, 1][anime.random(0, 1)] * value;
   return {
     x: p.x + radius * Math.cos(angle),
     y: p.y + radius * Math.sin(angle)
-  }
+  };
 }
 
 function createParticule(x, y) {
-  var p = {};
-  p.x = x;
-  p.y = y;
-  p.color = colors[anime.random(0, colors.length - 1)]; // Randomly select a color from the array
-  p.shape = shapes[anime.random(0, shapes.length - 1)]; // Randomly select a shape from the array
-  p.radius = anime.random(20, 40); // Change the size range here
-  p.endPos = setParticuleDirection(p);
+  const p = {
+    x,
+    y,
+    color: colors[anime.random(0, colors.length - 1)], // Randomly select a color from the array
+    shape: shapes[anime.random(0, shapes.length - 1)], // Randomly select a shape from the array
+    radius: anime.random(20, 40), // Change the size range here
+    endPos: setParticuleDirection({ x, y })
+  };
+
   p.draw = function() {
     ctx.beginPath();
     if (p.shape === 'circle') {
@@ -52,17 +54,20 @@ function createParticule(x, y) {
     ctx.fillStyle = p.color;
     ctx.fill();
   };
+
   return p;
 }
 
 function createCircle(x, y) {
-  var p = {};
-  p.x = x;
-  p.y = y;
-  p.color = colors[anime.random(0, colors.length - 1)]; // Randomly select a color from the array
-  p.radius = 0.1;
-  p.alpha = .5;
-  p.lineWidth = 6;
+  const p = {
+    x,
+    y,
+    color: colors[anime.random(0, colors.length - 1)], // Randomly select a color from the array
+    radius: 0.1,
+    alpha: 0.5,
+    lineWidth: 6
+  };
+
   p.draw = function() {
     ctx.globalAlpha = p.alpha;
     ctx.beginPath();
@@ -72,38 +77,34 @@ function createCircle(x, y) {
     ctx.stroke();
     ctx.globalAlpha = 1;
   };
+
   return p;
 }
 
 function renderParticule(anim) {
-  for (var i = 0; i < anim.animatables.length; i++) {
-    anim.animatables[i].target.draw();
-  }
+  anim.animatables.forEach(animatable => animatable.target.draw());
 }
 
 function animateParticules(x, y) {
-  var circle = createCircle(x, y);
-  var particules = [];
-  for (var i = 0; i < numberOfParticules; i++) {
-    particules.push(createParticule(x, y));
-  }
+  const circle = createCircle(x, y);
+  const particules = Array.from({ length: numberOfParticules }, () => createParticule(x, y));
+
   anime.timeline().add({
     targets: particules,
-    x: function(p) { return p.endPos.x; },
-    y: function(p) { return p.endPos.y; },
+    x: p => p.endPos.x,
+    y: p => p.endPos.y,
     radius: 0.1,
     duration: anime.random(1200, 1800),
     easing: 'easeOutExpo',
     update: renderParticule
-  })
-    .add({
+  }).add({
     targets: circle,
     radius: anime.random(80, 160),
     lineWidth: 0,
     alpha: {
       value: 0,
       easing: 'linear',
-      duration: anime.random(600, 800),  
+      duration: anime.random(600, 800)
     },
     duration: anime.random(1200, 1800),
     easing: 'easeOutExpo',
@@ -112,16 +113,14 @@ function animateParticules(x, y) {
   });
 }
 
-var render = anime({
+const render = anime({
   duration: Infinity,
-  update: function() {
-    ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-  }
+  update: () => ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
 });
 
 function randomFireworks() {
-  var x = anime.random(0, window.innerWidth);
-  var y = anime.random(0, window.innerHeight);
+  const x = anime.random(0, window.innerWidth);
+  const y = anime.random(0, window.innerHeight);
   animateParticules(x, y);
   setTimeout(randomFireworks, anime.random(500, 1500)); // Adjust the interval as needed
 }
@@ -133,17 +132,17 @@ document.addEventListener('mousedown', function(e) {
   animateParticules(pointerX, pointerY);
 }, false);
 
-document.getElementById('fireworksButton').addEventListener('click', function() {
-  var x = anime.random(0, window.innerWidth);
-  var y = anime.random(0, window.innerHeight);
+document.getElementById('fireworksButton').addEventListener('click', () => {
+  const x = anime.random(0, window.innerWidth);
+  const y = anime.random(0, window.innerHeight);
   animateParticules(x, y);
 });
 
-document.getElementById('changeColorButton').addEventListener('click', function() {
+document.getElementById('changeColorButton').addEventListener('click', () => {
   colors = Array.from({ length: 3 }, () => `#${Math.floor(Math.random() * 16777215).toString(16)}`);
 });
 
-document.getElementById('changeShapeButton').addEventListener('click', function() {
+document.getElementById('changeShapeButton').addEventListener('click', () => {
   shapes = ['circle', 'square', 'triangle']; // Reset shapes array to ensure randomness
 });
 
